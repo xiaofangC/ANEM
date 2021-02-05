@@ -1,4 +1,5 @@
 # coding: utf-8
+import typing
 from functools import wraps
 from time import time
 
@@ -9,17 +10,42 @@ from common.decorator import omittable_parentheses
 __all__ = ['logger', 'trace']
 
 
+def _func_full_name(func: typing.Callable):
+    if not getattr(func, '__module__', None):
+        return getattr(func, '__qualname__', repr(func))
+    return f'{func.__module__}.{func.__qualname__}'
+
+
+def _human_readable_time(elapsed: float):
+    mins, secs = divmod(elapsed, 60)
+    hours, mins = divmod(mins, 60)
+
+    if hours > 0:
+        message = f'{hours}h{mins:02d}m{secs:02d}'
+    elif mins > 0:
+        message = f'{mins}m{secs:02d}'
+    elif secs >= 1:
+        message = f'{secs:.2f}s'
+    else:
+        message = f'{secs * 1000.0:.0f}ms'
+
+    return message
+
+
 @omittable_parentheses()
 def trace(enter_msg: str = 'entering', leave_msg: str = 'leaving'):
+    """print tracing log when entering into or leaving out of a function. With running time."""
+
     def _decorator(func):
-        @wraps(_decorator)
+        @wraps(func)
         def _wrapper(*args, **kwargs):
-            fn_name = func.__name__
+            fn_name = _func_full_name(func)
             logger.info(f'[{fn_name}] {enter_msg}')
             now = time()
             result = func(*args, **kwargs)
             then = time()
-            logger.info(f'used time: {round(then - now, 3)}s')
+            elapsed = then - now
+            logger.info(f'[{fn_name}] running took {_human_readable_time(elapsed)} ({elapsed})')
             logger.info(f'[{fn_name}] {leave_msg}')
             return result
 
