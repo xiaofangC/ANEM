@@ -7,7 +7,7 @@ from common.logger import logger, trace
 
 
 @trace
-def func_need_know_exec_time():
+def func_need_know_running_time():
     a = 0
     for _ in range(10_000_000):
         a += 1
@@ -18,7 +18,7 @@ def main(args: Namespace, config: ConfigParser):
     logger.debug(f'args = {args}')
     logger.debug(f'config = {config}')
 
-    func_need_know_exec_time()
+    func_need_know_running_time()
 
 
 if __name__ == '__main__':

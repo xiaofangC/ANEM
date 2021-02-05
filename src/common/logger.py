@@ -34,6 +34,8 @@ def _human_readable_time(elapsed: float):
 
 @omittable_parentheses()
 def trace(enter_msg: str = 'entering', leave_msg: str = 'leaving'):
+    """print tracing log when entering into or leaving out of a function. With running time."""
+
     def _decorator(func):
         @wraps(func)
         def _wrapper(*args, **kwargs):
