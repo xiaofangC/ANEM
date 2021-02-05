@@ -7,7 +7,7 @@ def omittable_parentheses(maybe_decorator: typing.Callable = None, allow_partial
     """A decorator for decorators that allows them to be used without parentheses"""
 
     def _decorator(func):
-        @wraps(_decorator)
+        @wraps(func)
         def _wrapper(*args, **kwargs):
             if len(args) == 1 and callable(args[0]):
                 if allow_partial:
