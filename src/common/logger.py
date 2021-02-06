@@ -5,7 +5,7 @@ from time import time
 
 from loguru import logger
 
-from common.decorator import omittable_parentheses
+from common.decorators import omittable_parentheses
 
 __all__ = ['logger', 'trace']
 
