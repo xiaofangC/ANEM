@@ -1,6 +1,8 @@
 # coding: utf-8
 import abc
 import typing
+from argparse import Namespace
+from configparser import ConfigParser
 from uuid import uuid4
 
 from networkx import DiGraph, topological_sort
@@ -20,7 +22,7 @@ class Task(abc.ABC):
         self.next_tasks.append(other)
 
     @abc.abstractmethod
-    def run(self):
+    def run(self, cmd_args: Namespace, config: ConfigParser):
         logger.info(f'running node [{self.name}]')
 
 
@@ -48,8 +50,8 @@ class Pipeline:
         return topological_sort(di_graph)
 
     @trace
-    def run(self):
+    def run(self, cmd_args: Namespace, config: ConfigParser) -> None:
         logger.info(f'running pipeline [{self.name}]')
 
         for task in self.task_queue:
-            task.run()
+            task.run(cmd_args, config)
