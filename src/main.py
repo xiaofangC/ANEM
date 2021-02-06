@@ -1,14 +1,13 @@
 # coding: utf-8
-from argparse import ArgumentParser, Namespace
-from configparser import ConfigParser
+from argparse import ArgumentParser
 
 from common.const import CONF_DIR
 from common.pipeline import Pipeline
 from pipelines.sample_tasks import *
 
 
-def main(args: Namespace, config: ConfigParser):
-    logger.debug(f'args = {args}')
+def main(cmd_args: Namespace, config: ConfigParser):
+    logger.debug(f'args = {cmd_args}')
     logger.debug(f'config = {config}')
 
     task0 = Task0(name='0')
@@ -27,15 +26,15 @@ def main(args: Namespace, config: ConfigParser):
 
     memory_cache['input_a'] = 12
     pipeline_a = Pipeline(from_tasks=[task4, task5], name='Pipeline A')
-    pipeline_a.run()
+    pipeline_a.run(cmd_args, config)
     logger.info(f"output_a = {memory_cache['output_a']}")
 
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    args = parser.parse_args()
+    cmd_args = parser.parse_args()
 
     config = ConfigParser()
     config.read(CONF_DIR / 'sample.ini')
 
-    main(args, config)
+    main(cmd_args, config)
