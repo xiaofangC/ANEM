@@ -12,14 +12,14 @@ from common.logger import *
 
 class Task(abc.ABC):
     def __init__(self, name: str = None):
-        self.next_tasks: typing.List['Task'] = list()
+        self.parents: typing.List['Task'] = list()
         self.name = name or f'Task_{uuid4()}'
 
     def __rshift__(self, other: 'Task'):
         if not other or not isinstance(other, Task):
             raise TypeError("type of 'other' should be Node")
 
-        self.next_tasks.append(other)
+        other.parents.append(self)
 
     @abc.abstractmethod
     def run(self, cmd_args: Namespace, config: ConfigParser):
@@ -34,19 +34,19 @@ class Pipeline:
         self.task_queue = self._topological_sort(from_tasks)
         self.name = name
 
-    def _traveling_tasks(self, from_tasks: typing.Sequence[Task]) \
+    def _traveling_tasks(self, to_tasks: typing.Sequence[Task]) \
             -> typing.Iterator[typing.Tuple[Task, Task]]:
-        all_next_tasks = list()
-        for task in from_tasks:
-            for next_task in task.next_tasks:
-                yield task, next_task
-                all_next_tasks.append(next_task)
+        all_prev_tasks = list()
+        for task in to_tasks:
+            for prev_task in task.parents:
+                yield prev_task, task
+                all_prev_tasks.append(prev_task)
 
-            yield from self._traveling_tasks(all_next_tasks)
+            yield from self._traveling_tasks(all_prev_tasks)
 
-    def _topological_sort(self, from_tasks: typing.Sequence[Task]) -> typing.Iterable[Task]:
+    def _topological_sort(self, to_tasks: typing.Sequence[Task]) -> typing.Iterable[Task]:
         """Topological sort algorithm for a DAG"""
-        di_graph = DiGraph(self._traveling_tasks(from_tasks))
+        di_graph = DiGraph(self._traveling_tasks(to_tasks))
         return topological_sort(di_graph)
 
     @trace

@@ -25,7 +25,7 @@ def main(cmd_args: Namespace, config: ConfigParser):
     task3 >> task1
 
     memory_cache['input_a'] = 12
-    pipeline_a = Pipeline(from_tasks=[task4, task5], name='Pipeline A')
+    pipeline_a = Pipeline(from_tasks=[task1, task0], name='Pipeline A')
     pipeline_a.run(cmd_args, config)
     logger.info(f"output_a = {memory_cache['output_a']}")
 
