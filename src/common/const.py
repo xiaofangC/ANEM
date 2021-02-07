@@ -5,8 +5,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 CONF_DIR = PROJECT_ROOT / 'conf'
 DATA_DIR = PROJECT_ROOT / 'data'
 DB_DIR = PROJECT_ROOT / 'db'
-MODEL_DIR = PROJECT_ROOT / 'model'
-TEMP_DIR = PROJECT_ROOT / 'temp'
 
 DATA_01_RAW = DATA_DIR / '01_raw'
 DATA_02_INTERMEDIATE = DATA_DIR / '02_intermediate'

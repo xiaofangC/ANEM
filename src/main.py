@@ -1,9 +1,12 @@
 # coding: utf-8
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
+from configparser import ConfigParser
 
+from common.cache import memory_cache
 from common.const import CONF_DIR
+from common.logger import *
 from common.pipeline import Pipeline
-from pipelines.sample_tasks import *
+from pipelines.sample_tasks import Task0, Task1, Task2, Task3, Task4, Task5
 
 
 def main(cmd_args: Namespace, config: ConfigParser):
@@ -32,9 +35,17 @@ def main(cmd_args: Namespace, config: ConfigParser):
 
 if __name__ == '__main__':
     parser = ArgumentParser()
+    parser.add_argument('--date', type=str, required=True)
     cmd_args = parser.parse_args()
+
+    # sample
+    print(cmd_args.date)
 
     config = ConfigParser()
     config.read(CONF_DIR / 'sample.ini')
+
+    # sample
+    print(config.get("mysql", "host"))
+    print(config.getint("mysql", "port"))
 
     main(cmd_args, config)

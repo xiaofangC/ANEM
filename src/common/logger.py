@@ -59,7 +59,7 @@ if __name__ == '__main__':
     logger.error('error log')
 
 
-    @trace
+    @trace()
     def func_1(a, b):
         from time import sleep
         sleep(3)
