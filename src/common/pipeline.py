@@ -28,10 +28,10 @@ class Task(abc.ABC):
 
 class Pipeline:
     def __init__(self,
-                 from_tasks: typing.Sequence[Task],
+                 to_tasks: typing.Sequence[Task],
                  *,
                  name: str = 'Pipeline'):
-        self.task_queue = self._topological_sort(from_tasks)
+        self.task_queue = self._topological_sort(to_tasks)
         self.name = name
 
     def _traveling_tasks(self, to_tasks: typing.Sequence[Task]) \
