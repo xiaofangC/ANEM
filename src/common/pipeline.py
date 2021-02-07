@@ -23,7 +23,7 @@ class Task(abc.ABC):
 
     @abc.abstractmethod
     def run(self, cmd_args: Namespace, config: ConfigParser):
-        logger.info(f'running node [{self.name}]')
+        logger.info(f'running task [{self.name}]')
 
 
 class Pipeline:
